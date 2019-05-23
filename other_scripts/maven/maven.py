@@ -17,12 +17,12 @@ def find_java_files(root):
                 if 'import org.junit' in open(fname).read():
                     test = fname[len(root) + 1:]
                     test = test.split(os.sep)[0]
-                    for line in open(fname).readlines():
-                        if line.strip().startswith('package'):
-                            pkgs.append(line.strip()[len('package '):].split(';')[0].strip())
                 else:
                     src = fname[len(root) + 1:]
                     src = src.split(os.sep)[0]
+                    for line in open(fname).readlines():
+                        if line.strip().startswith('package'):
+                            pkgs.append(line.strip()[len('package '):].split(';')[0].strip())
         pkgs.sort()
         if pkgs:
             pkg = pkgs[0].split('.')[0]
