@@ -52,7 +52,7 @@
 			<plugin>
 				<groupId>com.github.markusmo3.urm</groupId>
 				<artifactId>urm-maven-plugin</artifactId>
-				<version>1.4.0</version>
+				<version>1.4.5</version>
 				<configuration>
 					<packages>
 						<param>%PKG%</param>
@@ -68,9 +68,9 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.jeluard</groupId>
+				<groupId>cz.alry</groupId>
 				<artifactId>plantuml-maven-plugin</artifactId>
-				<version>7954</version>
+				<version>1.5.0</version>
 				<configuration>
 					<sourceFiles>
 						<directory>${basedir}</directory>
@@ -91,7 +91,7 @@
 					<dependency>
 						<groupId>net.sourceforge.plantuml</groupId>
 						<artifactId>plantuml</artifactId>
-						<version>7954</version>
+						<version>1.2018.11</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -105,7 +105,6 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>LATEST</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
