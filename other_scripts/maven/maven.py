@@ -14,18 +14,18 @@ def find_java_files(root):
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
             elif fname.endswith('.java'):
-                if 'import org.junit' in open(fname).read():
+                if 'import org.junit' in open(fname, 'rb').read().decode('ascii', errors='ignore'):
                     test = fname[len(root) + 1:]
                     test = test.split(os.sep)[0]
                 else:
                     src = fname[len(root) + 1:]
                     src = src.split(os.sep)[0]
-                    for line in open(fname).readlines():
-                        if line.strip().startswith('package'):
-                            pkgs.append(line.strip()[len('package '):].split(';')[0].strip())
+                    for line in open(fname, 'rb').readlines():
+                        if line.strip().startswith(b'package'):
+                            pkgs.append(line.strip()[len('package '):].split(b';')[0].strip())
         pkgs.sort()
         if pkgs:
-            pkg = pkgs[0].split('.')[0]
+            pkg = pkgs[0].split(b'.')[0].decode('utf-8')
         flist = sub 
     return (src, test, pkg)
 
