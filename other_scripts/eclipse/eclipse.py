@@ -12,7 +12,7 @@ def find_java_files(root):
             if os.path.isdir(fname):
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
-            elif fname.endswith('.java'):
+            elif not fname.endswith("package-info.java") and fname.endswith('.java'):
                 if 'import org.junit' in open(fname).read():
                     test = fname[len(root) + 1:]
                     test = test.split(os.sep)[0]
