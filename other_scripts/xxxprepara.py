@@ -9,9 +9,19 @@ import fileinput
 files = os.listdir('.')
 contents = {}
 
+
+def process_student_name(name):
+    fields = name.split('_')
+    if len(fields) > 1:
+        name = fields[1:] + [fields[0]]
+        return '_'.join(name)
+    return name
+
+
 def try_mkdir(dirname):
     if not os.path.isdir(dirname):
         os.mkdir(dirname)
+
 
 def simplify(fnames):
     ref = fnames[0]
@@ -30,17 +40,21 @@ def simplify(fnames):
         result.append(fname[len(common):])
     return (common, result)
 
+
 def project(fname, pname):
-    project_file = open(fname, 'r')
+    once = False
+    project_file = open(fname, 'rb')
     project = project_file.readlines()
     project_file.close()
     project_file = open(fname, 'w')
     for line in project:
-        if line.startswith("\t<name>"):
+        if not once and line.strip().startswith(b"<name>"):
             project_file.write("<name>" + pname + "</name>\n")
+            once = True
         else:
-            project_file.write(line)
+            project_file.write(line.decode('utf-8'))
     project_file.close()
+
 
 def finddir(namelist):
     candidates = []
@@ -50,17 +64,19 @@ def finddir(namelist):
             continue
         if '.project' in fname:
             candidates.append([fname[:-(1 + len('.project'))], 0])
+        if '.iml' in fname:
+            candidates.append([fname[:-(1 + len('.iml'))], 0])
         if '.java' in fname:
             java_files.append(fname)
     if len(candidates) == 1:
         return candidates[0][0]
+    if not candidates:
+        return namelist[0]
     for candidate in candidates:
         for java_file in java_files:
             if candidate[0] in java_file:
                 candidate[1] += 1
     candidates.sort(key=lambda x: x[1])
-    if not candidates:
-        return namelist[0]
     return candidates[-1][0]
 
 try_mkdir('work')
@@ -73,7 +89,9 @@ for file_ in files:
                 student = file_[0:file_.find('_question_')]
             else:
                 student = file_.split("_")[0]
-        except:
+            student = process_student_name(student)
+        except Exception as e:
+            print(e)
             continue
         content = ''
         ref_dir = finddir(zfile.namelist())
@@ -104,7 +122,6 @@ for file_ in files:
         common, _ = simplify(student_files)
         for zfile_ in student_files:
             zinfo = zfile.getinfo(zfile_)
-            print(zinfo.filename)
             zinfo.filename = zinfo.filename[len(common):]
             if not zinfo.filename:
                 continue
