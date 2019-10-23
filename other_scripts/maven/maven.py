@@ -14,7 +14,8 @@ def find_java_files(root):
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
             elif fname.endswith('.java'):
-                if 'import org.junit' in open(fname, 'rb').read().decode('ascii', errors='ignore'):
+                line = open(fname, 'rb').read().decode('ascii', errors='ignore').strip()
+                if 'import org.junit' in line or 'import static org.junit' in line:
                     test = fname[len(root) + 1:]
                     test = test.split(os.sep)[0]
                 else:
