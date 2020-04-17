@@ -10,15 +10,22 @@ def find_java_files(root):
         sub = []
         for fname in flist:
             if os.path.isdir(fname):
+                if os.path.basename(fname) == 'src':
+                    src = fname[len(root) + 1:]
+                if os.path.basename(fname).startswith('test'):
+                    test = fname[len(root) + 1:]
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
             elif not fname.endswith("package-info.java") and fname.endswith('.java'):
-                if 'import org.junit' in open(fname).read():
+                if b'import org.junit' in open(fname, 'rb').read():
                     test = fname[len(root) + 1:]
                     test = test.split(os.sep)[0]
                 else:
-                    src = fname[len(root) + 1:]
-                    src = src.split(os.sep)[0]
+                    if not src:
+                        src = fname[len(root) + 1:]
+                        src = src.split(os.sep)[0]
+                        if os.path.isfile(root + os.sep + src):
+                            src = '.'
         flist = sub 
     return (src, test)
 
@@ -54,7 +61,33 @@ def prepare_eclipse_files(script_dir, project_dir, project_name, src, test):
         shutil.copytree(project_settings_src, project_settings_dst)
 
 
+def remove_hidden_files(cur_dir):
+    for fname in os.listdir(cur_dir):
+        c_file = cur_dir + os.sep + fname
+        if fname.startswith('.'):
+            if os.path.isdir(c_file):
+                shutil.rmtree(c_file)
+            else:
+                os.remove(c_file)
+        else:
+            if os.path.isdir(c_file):
+                remove_hidden_files(c_file)
+
+
 def main():
+    if sys.argv[1] == '-s':
+        for project_dir in os.listdir(sys.argv[2]):
+            if os.path.isdir(project_dir):
+                remove_hidden_files(project_dir)
+                project_name = os.path.dirname(project_dir + os.sep).split(os.sep)[-1]
+                script_dir = os.path.dirname(sys.argv[0])
+
+                src, test = find_java_files(project_dir)
+                show(project_dir, src, test)
+
+                prepare_eclipse_files(script_dir, project_dir, project_name, src, test)
+        return
+                
     project_dir = sys.argv[1]
     project_name = os.path.dirname(project_dir + os.sep).split(os.sep)[-1]
     script_dir = os.path.dirname(sys.argv[0])
