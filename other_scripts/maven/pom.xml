@@ -19,7 +19,7 @@
 	<repositories>
 		<repository>
 			<id>Central</id>
-			<url>http://central.maven.org/maven2/</url>
+			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
 	</repositories>
 
@@ -114,15 +114,13 @@
 			<artifactId>easyaccept</artifactId>
 			<version>LATEST</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<reporting>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>LATEST</version>
 			</plugin>
 			<plugin>
