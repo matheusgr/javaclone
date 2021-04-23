@@ -32,7 +32,8 @@ for l1 in labels:
         if l1 == l2:
             result[-1].append(0.0)
         else:
-            result[-1].append(pairs[l1][l2])
+            # Use dissimilarity:
+            result[-1].append(1 - pairs[l1][l2])
 
 def plot_dendrogram(model, **kwargs):
     # Create linkage matrix and then plot the dendrogram
