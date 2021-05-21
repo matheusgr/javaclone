@@ -73,29 +73,27 @@ def remove_hidden_files(cur_dir):
             if os.path.isdir(c_file):
                 remove_hidden_files(c_file)
 
-
-def main():
-    if sys.argv[1] == '-s':
-        for project_dir in os.listdir(sys.argv[2]):
-            if os.path.isdir(project_dir):
-                remove_hidden_files(project_dir)
-                project_name = os.path.dirname(project_dir + os.sep).split(os.sep)[-1]
-                script_dir = os.path.dirname(sys.argv[0])
-
-                src, test = find_java_files(project_dir)
-                show(project_dir, src, test)
-
-                prepare_eclipse_files(script_dir, project_dir, project_name, src, test)
-        return
-                
-    project_dir = sys.argv[1]
+def process_project(script_dir, project_dir):
+    remove_hidden_files(project_dir)
     project_name = os.path.dirname(project_dir + os.sep).split(os.sep)[-1]
-    script_dir = os.path.dirname(sys.argv[0])
 
     src, test = find_java_files(project_dir)
     show(project_dir, src, test)
 
-    prepare_eclipse_files(script_dir, project_dir, project_name, src, test)
+    prepare_eclipse_files(script_dir, project_dir, project_name, src, test)    
+
+def main():
+    script_dir = os.path.dirname(sys.argv[0])
+    if sys.argv[1] == '-s':
+        for project_dir in os.listdir(sys.argv[2]):
+            project_dir = sys.argv[2] + os.sep + project_dir
+            print("project... " + project_dir)
+
+            if os.path.isdir(project_dir):
+                process_project(script_dir, project_dir)
+        return
+                
+    process_project(script_dir, sys.argv[1])
 
 
 if __name__ == "__main__":

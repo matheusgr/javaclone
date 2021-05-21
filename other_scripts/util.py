@@ -25,6 +25,7 @@ def try_mkdir(dirname):
 
 
 def get_package(code):
+    order = default_order
     for line in code.splitlines():
         line, order = decode_line(line, order)
         if line.startswith('package'):
