@@ -2,6 +2,13 @@ import os
 import shutil
 import sys
 
+import unicodedata
+import re
+
+def convert_word(word):
+    word = unicodedata.normalize("NFD", word)
+    word = re.sub("[\u0300-\u036f]", "", word)
+    return word
 
 def find_java_files(root):
     flist = [root + os.sep + fname for fname in os.listdir(root)]
@@ -75,7 +82,7 @@ def remove_hidden_files(cur_dir):
 
 def process_project(script_dir, project_dir):
     remove_hidden_files(project_dir)
-    project_name = os.path.dirname(project_dir + os.sep).split(os.sep)[-1]
+    project_name = convert_word(os.path.dirname(project_dir + os.sep).split(os.sep)[-1])
 
     src, test = find_java_files(project_dir)
     show(project_dir, src, test)
