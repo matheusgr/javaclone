@@ -2,10 +2,9 @@ import os
 import sys
 import zipfile
 
-from util import decode_line, default_order, try_mkdir, get_package
+from util import try_mkdir, get_package
 
 
-order = default_order
 try_mkdir('work')
 work_directory = sys.argv[1] if len(sys.argv) > 1 else "."
 
