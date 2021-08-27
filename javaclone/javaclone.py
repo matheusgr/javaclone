@@ -46,12 +46,13 @@ def process_content(raw, content, content_counter):
 
 
 def process_zip(zip_file):
+    content = []
+    content_counter = Counter()
     try:
         zfile = zipfile.ZipFile(zip_file)
     except zipfile.BadZipFile as e:
-        error(e)
-    content = []
-    content_counter = Counter()
+        error("Badzipfile " + zip_file)
+        return content, content_counter
     for zfile_ in zfile.namelist():
         if not zfile_.lower().endswith('.java') or \
                     zfile_.lower().endswith('module-info.java') or \
