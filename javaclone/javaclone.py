@@ -14,19 +14,25 @@ import utils
 def error(e):
     print(e, file=sys.stderr)
 
+CONFIG = {'node_depth' : lambda path: 'P' * len(path),
+            'parent': True}
+
+#CONFIG = {'node_depth' : lambda path: '',
+#            'parent': False}
 
 def process_java_code(code, content, content_counter):
     tree = javalang.parse.parse(code)
     path_depth = [(-1, "ROOT")]
     for path, node in tree:
         # ast node depth create different nodes
-        cur_node = ('P' * len(path)) + node.__class__.__name__  
+        cur_node = (CONFIG['node_depth'](path)) + node.__class__.__name__  
         # cur_node is closer to root than actual parent on list:
         while path_depth[-1][0] >= len(path):
             path_depth.pop()
         # append current node with parent:
-        content_counter[path_depth[-1][1] + cur_node] += 1
-        content.append(path_depth[-1][1] + cur_node)  
+        processed_node = path_depth[-1][1] + cur_node if CONFIG["parent"] else cur_node
+        content_counter[processed_node] += 1
+        content.append(processed_node)
         if path_depth[-1][0] == len(path):
             # same level, replace
             path_depth[-1] = (len(path), cur_node)

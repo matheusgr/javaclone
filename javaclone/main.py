@@ -9,12 +9,11 @@ def print_terms():
     from pprint import pprint
     terms = {}
     sizes = []
-    for v in contents.values():
+    for filename, (content, content_counter) in contents.items():
         size = 0
-        for t in v.split():
-            if t.startswith('aa'):
-                terms[t] = terms.get(t, 0) + 1
-                size += 1
+        for prog_term, prog_count in content_counter.items():
+            terms[prog_term] = terms.get(prog_term, 0) + prog_count
+            size += prog_count
         sizes.append(size)
     sizes.sort()
     print('\n'.join([str(x) for x in sizes]))
