@@ -1,4 +1,3 @@
-import itertools
 import os
 import sys
 import zipfile
@@ -7,7 +6,6 @@ from collections import Counter
 
 import javalang
 
-import similarity
 import utils
 
 
@@ -17,8 +15,6 @@ def error(e):
 CONFIG = {'node_depth' : lambda path: 'P' * len(path),
             'parent': True}
 
-#CONFIG = {'node_depth' : lambda path: '',
-#            'parent': False}
 
 def process_java_code(code, content, content_counter):
     tree = javalang.parse.parse(code)
@@ -45,7 +41,7 @@ def process_content(raw, content, content_counter):
     code = utils.decode_line(raw)
     try:
         process_java_code(code, content, content_counter)
-    except Exception as e:
+    except Exception:
         comments = utils.remove_comments(code).split()
         content.extend(comments)
         content_counter.update(comments)
@@ -56,7 +52,7 @@ def process_zip(zip_file):
     content_counter = Counter()
     try:
         zfile = zipfile.ZipFile(zip_file)
-    except zipfile.BadZipFile as e:
+    except zipfile.BadZipFile:
         error("Badzipfile " + zip_file)
         return content, content_counter
     for zfile_ in zfile.namelist():
@@ -77,5 +73,5 @@ def process(directory='.'):
     contents = {}
     for file_ in files:
         if file_.lower().endswith('.zip'):
-            contents[file_] = process_zip(file_)
+            contents[file_] = process_zip(directory + os.sep + file_)
     return contents

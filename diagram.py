@@ -69,11 +69,6 @@ def process_java_code(classes_, code):
             classes_[name] = JClass(node.name, types)
 
 
-def process_content(raw):
-    code = raw.decode('ascii', 'ignore')
-    return process_java_code(code)
-
-    
 for root, dirs, files in os.walk(sys.argv[1]):
     classes_ = {}
     for name in files:
