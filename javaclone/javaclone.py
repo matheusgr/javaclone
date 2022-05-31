@@ -41,10 +41,14 @@ def process_content(raw, content, content_counter):
     code = utils.decode_line(raw)
     try:
         process_java_code(code, content, content_counter)
+        return True
     except Exception:
-        comments = utils.remove_comments(code).split()
-        content.extend(comments)
-        content_counter.update(comments)
+        # Ignore content. Alternative: use text extracted from code:
+        #  comments = utils.remove_comments(code).split()
+        #  content.extend(comments)
+        #  content_counter.update(comments)
+        pass
+    return False
 
 
 def process_zip(zip_file):
@@ -63,7 +67,8 @@ def process_zip(zip_file):
         raw = zfile.read(zfile_)
         if b'@Test' in raw:
             continue
-        process_content(raw, content, content_counter)
+        if not process_content(raw, content, content_counter):
+            sys.stderr.write("Error parsing file in " + zip_file)
     return content, content_counter
         
 
