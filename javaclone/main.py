@@ -26,10 +26,13 @@ def print_sims(directory):
     contents = javaclone.process(directory)
     items = contents.items()
     simi = similarity.sim_pairs(items)
+    max_sim = {}
     simi.sort(key=lambda x: x[2])
     for x, y, z in simi:
+        max_sim[x] = max(max_sim.get(x, 0), z)
+        max_sim[y] = max(max_sim.get(y, 0), z)
         print(str(z) + " " + x[:40] + " " + y[:40])
-
+    print('\n'.join(map(str, max_sim.values())))
 
 def main():
     parser = argparse.ArgumentParser(description='Compare java code.')
