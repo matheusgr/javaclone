@@ -1,5 +1,4 @@
 import itertools
-import re
 
 
 def sim(x1, x2):
@@ -12,6 +11,6 @@ def sim(x1, x2):
 
 def sim_pairs(codes):
     result = []
-    for (name1, (content1, content_counter1)), (name2, (content2, content_counter2)) in itertools.combinations(codes, 2):
+    for (name1, (_, content_counter1)), (name2, (_, content_counter2)) in itertools.combinations(codes, 2):
         result.append((name1, name2, sim(content_counter1, content_counter2)))
     return result
