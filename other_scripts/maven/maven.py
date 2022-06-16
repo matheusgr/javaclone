@@ -32,7 +32,7 @@ def find_java_files(root):
 
 
 def prepare_maven_files(script_dir, project_dir, project_name, src, test, pkg):
-    pom = open(script_dir + os.sep + 'pom.xml').read().replace("%NAME%", project_name).replace("%SRC%", src).replace('%TEST%', test or src).replace("%PKG%", pkg)
+    pom = open(script_dir + os.sep + 'pom.xml.template').read().replace("%NAME%", project_name).replace("%SRC%", src).replace('%TEST%', test or src).replace("%PKG%", pkg)
     open(project_dir + os.sep + "pom.xml", 'w').write(pom)
 
 
