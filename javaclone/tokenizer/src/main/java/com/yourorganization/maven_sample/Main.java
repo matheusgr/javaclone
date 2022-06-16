@@ -50,8 +50,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        
-        if (args[0].toLowerCase().endsWith(".zip")) {
+        if (args[0].toLowerCase().strip().endsWith(".zip")) {
             parseZip(args[0]);
         } else {
             parseDir(args[0]);

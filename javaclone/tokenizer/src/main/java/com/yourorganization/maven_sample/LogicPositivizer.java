@@ -43,7 +43,7 @@ public class LogicPositivizer {
 
     public static void recurse(String pName, Node n, int level, String parent) {
         String currentStr = n.getClass().getName();
-        System.out.println(pName + " " + level + " " + currentStr + " " + parent);
+        System.out.println(pName + ";" + level + ";" + currentStr + ";" + parent);
         for (Node nChild : n.getChildNodes()) {
             recurse(pName, nChild, level + 1, currentStr);
         }
