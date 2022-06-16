@@ -14,6 +14,10 @@ import com.github.javaparser.ast.visitor.GenericVisitorWithDefaults;
  */
 public class LogicPositivizer {
 
+    private LogicPositivizer() {
+        
+    }
+
     public static boolean parse(ParseResult<CompilationUnit> result, String unitName) {
         if (!result.isSuccessful()) {
             for (Problem problem : result.getProblems()) {
