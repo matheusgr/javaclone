@@ -12,12 +12,12 @@ f_ = sys.argv[1]
 connections = []
 pairs = {}
 
-for l in open(f_, 'r').readlines():
+for l in open(f_, 'r', encoding='utf-8').readlines():
     conn = l.split()
-    pairs[conn[0]] = pairs.get(conn[0], {})
     pairs[conn[1]] = pairs.get(conn[1], {})
-    pairs[conn[0]][conn[1]] = float(conn[2])
-    pairs[conn[1]][conn[0]] = float(conn[2])
+    pairs[conn[2]] = pairs.get(conn[2], {})
+    pairs[conn[1]][conn[2]] = float(conn[0])
+    pairs[conn[2]][conn[1]] = float(conn[0])
 
 labels = list(pairs.keys())
 labels.sort()
