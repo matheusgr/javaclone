@@ -1,11 +1,11 @@
 import argparse
 
-import javaclone
+from java_javaclone import process
 import similarity
 
 
 def print_terms(directory):
-    contents = javaclone.process(directory)
+    contents = process(directory)
     terms = {}
     total_terms_per_program = []
     for _, (_, content_counter) in contents.items():
@@ -23,7 +23,7 @@ def print_terms(directory):
 
 
 def print_sims(directory):
-    contents = javaclone.process(directory)
+    contents = process(directory)
     items = contents.items()
     simi = similarity.sim_pairs(items)
     max_sim = {}
