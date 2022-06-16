@@ -1,6 +1,6 @@
 import distribution
 
-vals = list(map(float, open("data.txt").readlines()))
+vals = list(map(float, open("results/data.txt").readlines()))
 
 best_dist, best_p, params = distribution.get_best_distribution(vals)
 
