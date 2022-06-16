@@ -1,12 +1,14 @@
 import bisect
 from collections import Counter
 import random
+import sys
 
 from scipy.stats import norm
 
+sys.path.append('../javaclone')
 import similarity
 
-freqs = list(map(int, open('freq.txt').readlines()))
+freqs = list(map(int, open('results/freq.txt').readlines()))
 
 values = [freqs[0]]
 for index, freq in enumerate(freqs[1:]):
@@ -14,7 +16,7 @@ for index, freq in enumerate(freqs[1:]):
 
 max_value = values[-1]
 
-docs_size = 30
+docs_size = 99
 
 r = norm.rvs(loc=850.4117647058823, scale=241.92343436898753, size=docs_size)
 docs = []
@@ -41,5 +43,6 @@ for pair in sorted(pairs, key=lambda x: x[2]):
     sim_per_doc[pair[1]] = max(sim_per_doc[pair[1]], pair[2])
     print(pair)
 
-for k,v in sim_per_doc.items():
+for v in sorted(list(set(sim_per_doc.values()))):
+    # get max unique similarity
     print(v)
