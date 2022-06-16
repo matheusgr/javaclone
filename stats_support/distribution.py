@@ -13,6 +13,7 @@ def get_best_distribution(data):
         # Applying the Kolmogorov-Smirnov test
         D, p = st.kstest(data, dist_name, args=param)
         print("p value for "+dist_name+" = "+str(p))
+        print("params:", param)
         dist_results.append((dist_name, p))
 
     # select the best fitted distribution
