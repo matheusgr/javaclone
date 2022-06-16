@@ -1,6 +1,18 @@
 import os
-import shutil
 import sys
+
+def process_java_file(root, test, src, pkgs, fname):
+    line = open(fname, 'rb').read().decode('ascii', errors='ignore').strip()
+    if 'import org.junit' in line or 'import static org.junit' in line:
+        test = fname[len(root) + 1:]
+        test = test.split(os.sep)[0]
+    else:
+        src = fname[len(root) + 1:]
+        src = src.split(os.sep)[0]
+        for line in open(fname, 'rb').readlines():
+            if line.strip().startswith(b'package'):
+                pkgs.append(line.strip()[len('package '):].split(b';')[0].strip())
+    return test, src
 
 
 def find_java_files(root):
@@ -14,16 +26,7 @@ def find_java_files(root):
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
             elif fname.endswith('.java'):
-                line = open(fname, 'rb').read().decode('ascii', errors='ignore').strip()
-                if 'import org.junit' in line or 'import static org.junit' in line:
-                    test = fname[len(root) + 1:]
-                    test = test.split(os.sep)[0]
-                else:
-                    src = fname[len(root) + 1:]
-                    src = src.split(os.sep)[0]
-                    for line in open(fname, 'rb').readlines():
-                        if line.strip().startswith(b'package'):
-                            pkgs.append(line.strip()[len('package '):].split(b';')[0].strip())
+                test, src = process_java_file(root, test, src, pkgs, fname)
         pkgs.sort()
         if pkgs:
             pkg = pkgs[0].split(b'.')[0].decode('utf-8')
