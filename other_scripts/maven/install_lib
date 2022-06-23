@@ -1,0 +1,6 @@
+mvn install:install-file \
+-Dfile=easyaccept.jar \
+-DgroupId=easyaccept \
+-DartifactId=easyaccept \
+-Dversion=1.0 \
+-Dpackaging=jar
