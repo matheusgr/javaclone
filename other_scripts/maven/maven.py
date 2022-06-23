@@ -25,29 +25,28 @@ def process_java_file(root, fname):
     return dirname
 
 
+def check_dirname(original, new):
+    if not original:
+        return new
+    if original != new:
+        print("MISMATCH: ", original, new)
+        exit(2)
+
+
 def find_java_files(root):
     flist = [root + os.sep + fname for fname in os.listdir(root)]
     src, test = '', ''
-    while len(flist) > 0:
+    while len(flist):
         sub = []
         for fname in flist:
             if os.path.isdir(fname):
-                for fname_sub in os.listdir(fname):
-                    sub.append(fname + os.sep + fname_sub)
+                sub.extend([fname + os.sep + fname_sub for fname_sub in os.listdir(fname)])
             elif fname.endswith('.java'):
                 dirname = process_java_file(root, fname)
                 if (is_junit_test(fname)):
-                    if not test:
-                        test = dirname
-                    if test and test != dirname:
-                        print("MISMATCH: ", test, dirname)
-                        exit(2)
+                    test = check_dirname(test, dirname)
                 else:
-                    if not src:
-                        src = dirname
-                    if src and src != dirname:
-                        print("MISMATCH: ", src, dirname)
-                        exit(2)
+                    src = check_dirname(src, dirname)
         flist = sub
     return (src, test)
 
