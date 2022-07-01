@@ -11,7 +11,7 @@ codes_set = set()
 fname = sys.argv[1]
 
 for line in open(fname):
-    code1, code2, distance = line[0:41].strip(), line[41:81].strip(), 1 - float(line[81:].strip())
+    distance, code1, code2 = 1 - float(line.split()[0].strip()), line.split()[1].strip(), line.split()[2].strip()
     distance_vector = distance_matrix.get(code1, {})
     distance_vector[code2] = distance
     distance_matrix[code1] = distance_vector
