@@ -17,21 +17,30 @@ def find_java_files(root):
         sub = []
         for fname in flist:
             if os.path.isdir(fname):
-                if os.path.basename(fname) == 'src':
+                if os.path.basename(fname).lower() == 'src':
                     src = fname[len(root) + 1:]
-                if os.path.basename(fname).startswith('test'):
+                if os.path.basename(fname).lower().startswith('test'):
                     test = fname[len(root) + 1:]
                 for fname_sub in os.listdir(fname):
                     sub.append(fname + os.sep + fname_sub)
-            elif not fname.endswith("package-info.java") and fname.endswith('.java'):
-                if b'import org.junit' in open(fname, 'rb').read():
+            elif not fname.endswith("package-info.java") and not fname.endswith("module-info.java") and fname.endswith('.java'):
+                code = open(fname, 'rb').read()
+                pkg_level = 0
+                for line in code.split(b'\n'):
+                    if line.startswith(b'package'):
+                        pkg_level = line.split()[1].count(b'.') + 1
+                if b'import org.junit' in code:
                     test = fname[len(root) + 1:]
-                    test = test.split(os.sep)[0]
+                    test = test.split(os.sep)[:-1 - (pkg_level)]
+                    test = os.sep.join(test)
+                    if not test:
+                        test = '.'
                 else:
                     if not src:
                         src = fname[len(root) + 1:]
-                        src = src.split(os.sep)[0]
-                        if os.path.isfile(root + os.sep + src):
+                        src = src.split(os.sep)[:-1 - (pkg_level)]
+                        src = os.sep.join(src)
+                        if not src:
                             src = '.'
         flist = sub 
     return (src, test)
