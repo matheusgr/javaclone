@@ -6,7 +6,8 @@ from collections import Counter
 import subprocess
 
 def process_content(zip_file, content, content_counter):
-    process = subprocess.run(["java", "-jar", "parser.jar", zip_file], capture_output=True)
+    script_dirname = os.path.dirname(os.path.realpath(sys.argv[0])) + os.sep
+    process = subprocess.run(["java", "-jar", script_dirname + "parser.jar", zip_file], capture_output=True)
     path_depth = [(-1, "ROOT")]
     if process.returncode != 0:
         return False
